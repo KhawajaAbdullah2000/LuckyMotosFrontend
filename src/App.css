@@ -11,6 +11,8 @@
   overflow-y: auto; /* Adds vertical scroll */
 }
 
-.full-width-table .table {
-  width: 70%;  /* Ensures the table stretches to the full width of its container */
+
+.highlight-row {
+  background-color: 'red';
+ color: #333; /* Dark text color for better contrast */
 }
