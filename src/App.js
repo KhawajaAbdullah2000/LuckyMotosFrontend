@@ -6,6 +6,15 @@ import 'chart.js/auto';
 import my_animation from './car_animation.json';
 import Lottie from 'react-lottie';
 
+import { Chart } from 'chart.js';
+import zoomPlugin from 'chartjs-plugin-zoom';
+
+// Register the zoom plugin globally
+Chart.register(zoomPlugin);
+
+
+
+
 
 function App() {
     const [file, setFile] = useState(null);
@@ -13,6 +22,7 @@ function App() {
     const [result, setResult] = useState(null);
     const [loading, setLoading] = useState(false); 
 
+    //lotti animation options
     const defaultOptions = {
         loop: true,
         autoplay: true, 
@@ -68,21 +78,106 @@ function App() {
             {
                 label: 'Sales Forecast (yhat1)',
                 data: result ? Object.values(result.yhat1) : [],
-                fill: false,
                 borderColor: 'rgb(75, 192, 192)',
                 tension: 0.1,
                 pointBackgroundColor: 'rgb(255, 99, 132)', // Point fill color
                 pointBorderColor: 'rgb(255, 99, 132)' ,
                 pointRadius: 4, 
-             pointHoverRadius: 7, 
+               pointHoverRadius: 7, 
             }
         ]
     };
 
-   
+    const options = {
+        scales: {
+            x: {
+                display:true,
+                title: {
+                    display: true,
+                    text: 'Dates',
+                    color: '#911',
+                    
+                    font: {
+                      family: 'Comic Sans MS',
+                      size: 20,
+                      weight: 'bold',
+                      lineHeight: 1.2,
+                    }
+                   
+                  },
+                grid: {
+                    color: 'rgba(255, 0, 0, 0.5)', // Light pink grid lines on the x-axis
+                    borderColor: 'rgba(255, 0, 0, 0.5)' // Pink border line on the x-axis
+                }
+            },
+            y: {
+                grid: {
+                    color: 'rgba(255, 0, 0, 0.5)', // Light blue grid lines on the y-axis
+                    borderColor: 'rgba(255, 0, 0, 0.5)'// Blue border line on the y-axis
+                }
+            }
+        },
+        plugins:{
+            legend:false,
+            zoom: {
+                zoom: {
+                  wheel: {
+                    enabled: true,
+                  },
+               
+                  pinch: {
+                    enabled: true
+                  },
+                  pan:{
+                    enabled:true
+                  
+                  },
+                  mode: 'xy',
+                },
+                pan:{
+                    enabled:true
+                  
+                  },
+              }
+        },
+       
+      
+
+
+    };
+
 
     return (
+        <div>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light fw-bold">
+        <div class="container-fluid">
+         
+            <a class="navbar-brand" href="/">LUCKY MOTORS</a>
 
+      
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto"> 
+                    <li class="nav-item">
+                        <button class="nav-link active" aria-current="page" href="#">Home</button>
+                    </li>
+
+                    <li class="nav-item">
+                    <button class="nav-link active" aria-current="page" href="#">Profile</button>
+                </li>
+
+                <li class="nav-item">
+                <button class="nav-link active" aria-current="page" href="#">Record</button>
+            </li>
+                  
+                </ul>
+            </div>
+        </div>
+    </nav>
         
         <div className="container">
             <h1 className='text-center fw-bold mb-4 mt-3'>Sales Forecasting</h1>
@@ -136,9 +231,10 @@ function App() {
 
             <div className="row text-center">
                 <div className="col-12">
-                    {result && <Line data={chartData}  />}
+                   <Line data={chartData} options={options}  />
                 </div>
             </div>
+        </div>
         </div>
        
     );
