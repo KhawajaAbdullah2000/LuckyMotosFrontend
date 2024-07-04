@@ -3,6 +3,8 @@ import axios from 'axios';
 import './App.css'; 
 import { Line } from 'react-chartjs-2';
 import 'chart.js/auto'; 
+import my_animation from './car_animation.json';
+import Lottie from 'react-lottie';
 
 
 function App() {
@@ -10,6 +12,13 @@ function App() {
     const [periods, setPeriods] = useState(5);
     const [result, setResult] = useState(null);
     const [loading, setLoading] = useState(false); 
+
+    const defaultOptions = {
+        loop: true,
+        autoplay: true, 
+        animationData: my_animation
+    
+    };
 
     const handleFileChange = (event) => {
         setFile(event.target.files[0]);
@@ -25,6 +34,7 @@ function App() {
     };
 
     const handleSubmit = async (event) => {
+        setResult('')
         event.preventDefault();
         const formData = new FormData();
         formData.append('file', file);
@@ -32,6 +42,7 @@ function App() {
 
         try {
             setLoading(true);
+            
             const response = await axios.post('http://localhost:5000/predict', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
@@ -68,9 +79,7 @@ function App() {
         ]
     };
 
-    
-    
-
+   
 
     return (
 
@@ -98,6 +107,7 @@ function App() {
                 </div>
                 <div className="col-md-6 full-width-table">
                 <h3 className='text-center'>Results</h3>
+                {loading && <Lottie options={defaultOptions} height={400} width={400}/>}
                 {yhat1Values.length > 0 && (
                     <div className="scrollable-table">
                         <table className="table table-responsive table-striped table-primary">
