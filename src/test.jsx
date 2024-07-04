@@ -1,5 +1,3 @@
-// import React, { useState } from 'react';
-import Sidebar from './Sidebar.jsx'
 import React, { useState } from 'react';
 import axios from 'axios';
 import './App.css'; 
@@ -16,12 +14,13 @@ Chart.register(zoomPlugin);
 
 
 
+
+
 function App() {
     const [file, setFile] = useState(null);
     const [periods, setPeriods] = useState(5);
     const [result, setResult] = useState(null);
     const [loading, setLoading] = useState(false); 
-
 
     //lotti animation options
     const defaultOptions = {
@@ -60,7 +59,6 @@ function App() {
                 }
             });
             setResult(response.data);
-           // console.log( response.data)
             setLoading(false);
           
         } catch (error) {
@@ -73,6 +71,7 @@ function App() {
     const dates = result ? Object.values(result.ds).map(date => date.split(" ").slice(0, 4).join(" ")) : [];
     const highlightStartIndex = result ? yhat1Values.length - periods : 0;
 
+    // Prepare chart data
     const chartData = {
         labels: result ?Object.values(result.ds).map(date => date.split(" ").slice(1, 4).join(" ")) : [],
         datasets: [
@@ -85,19 +84,7 @@ function App() {
                 pointBorderColor: 'rgb(255, 99, 132)' ,
                 pointRadius: 4, 
                pointHoverRadius: 7, 
-            },
-            // {
-            //     label: 'Actual Sales (y)',
-            //     data: result ? Object.values(result.y) : [],
-            //     borderColor: 'rgb(54, 162, 235)',
-            //     backgroundColor: 'rgba(54, 162, 235, 0.5)', // Semi-transparent blue
-            //     tension: 0.1,
-            //     pointBackgroundColor: 'rgb(0,0,0)', 
-            //     pointBorderColor: '#fff',
-            //     pointRadius: 4,
-            //     pointHoverRadius: 7,
-            //     showLine: false, 
-            // }
+            }
         ]
     };
 
@@ -159,18 +146,45 @@ function App() {
 
     };
 
-  return (
-    <div className="">
-      <div className="row">
-        <div className="col-md-2">
-        <Sidebar/>
+
+    return (
+        <div>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light fw-bold">
+        <div class="container-fluid">
+         
+            <a class="navbar-brand" href="/">LUCKY MOTORS</a>
+
+      
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto"> 
+                    <li class="nav-item">
+                        <button class="nav-link active" aria-current="page" href="#">Home</button>
+                    </li>
+
+                    <li class="nav-item">
+                    <button class="nav-link active" aria-current="page" href="#">Profile</button>
+                </li>
+
+                <li class="nav-item">
+                <button class="nav-link active" aria-current="page" href="#">Record</button>
+            </li>
+                  
+                </ul>
+            </div>
         </div>
+    </nav>
         
-        <div className="col-md-10 mt-4">
-          <div className="row">
-          <div className="col-md-4 mt-2">
-          <div className="card shadow-lg">
-                        <div className="card-header bg-success text-white fw-bold text-center">Upload and Predict</div>
+        <div className="container">
+            <h1 className='text-center fw-bold mb-4 mt-3'>Sales Forecasting</h1>
+            <div className="row">
+                <div className="col-md-6 center-content">
+                    <div className="card shadow-lg">
+                        <div className="card-header bg-primary text-white fw-bold text-center">Upload and Predict</div>
                         <div className="card-body">
                             <form onSubmit={handleSubmit} className="form-group">
                                 <div className="form-group">
@@ -185,57 +199,45 @@ function App() {
                             </form>
                         </div>
                     </div>
-        </div>
-
-     
-        
-          </div>
-          <div className="row mt-8">
-            <div className="col-md-8">
-            <Line data={chartData} options={options}  />
-            </div>
-
-            <div className="col-md-4">
-          
-            {loading && <Lottie options={defaultOptions} height={400} width={400}/>}
-
-            {yhat1Values.length<=0 && !loading && (
-                <div className='text-center'>
-
-                <h3>Results ..</h3>
-                
                 </div>
-            )}
+                <div className="col-md-6 full-width-table">
+                <h3 className='text-center'>Results</h3>
+                {loading && <Lottie options={defaultOptions} height={400} width={400}/>}
+                {yhat1Values.length > 0 && (
+                    <div className="scrollable-table">
+                        <table className="table table-responsive table-striped table-primary">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Forecast</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            {yhat1Values.map((value, index) => (
+                                <tr key={index} className={index >= highlightStartIndex ? 'table-warning' : ''}>
 
-            {yhat1Values.length > 0 && (
-                <div className="scrollable-table">
-                    <table className="table table-responsive table-info table-bordered" >
-                        <thead>
-                            <tr>
-                                <th>Date</th>
-                                <th>Forecast</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        {yhat1Values.map((value, index) => (
-                            <tr key={index} className={index >= highlightStartIndex ? 'table-warning' : ''}>
-
-                                <td>{dates[index]}</td>
-                                <td>{value}</td>
-                            </tr>
-                        ))}
-                        </tbody>
-                    </table>
+                                    <td>{dates[index]}</td>
+                                    <td>{value}</td>
+                                </tr>
+                            ))}
+                            </tbody>
+                        </table>
+                    </div>
+                )}
                 </div>
-            )}
-            
             </div>
-          
-          </div>
+         
+                  
+
+            <div className="row text-center">
+                <div className="col-12">
+                   <Line data={chartData} options={options}  />
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
-  );
+        </div>
+       
+    );
 }
 
 export default App;
