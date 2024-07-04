@@ -4,10 +4,12 @@ import './App.css';
 import { Line } from 'react-chartjs-2';
 import 'chart.js/auto'; 
 
+
 function App() {
     const [file, setFile] = useState(null);
     const [periods, setPeriods] = useState(5);
     const [result, setResult] = useState(null);
+    const [loading, setLoading] = useState(false); 
 
     const handleFileChange = (event) => {
         setFile(event.target.files[0]);
@@ -29,14 +31,17 @@ function App() {
         formData.append('periods', periods);
 
         try {
+            setLoading(true);
             const response = await axios.post('http://localhost:5000/predict', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }
             });
             setResult(response.data);
-            console.log(response.data); // Logging the response data
+            setLoading(false);
+          
         } catch (error) {
+            setLoading(false);
             console.error('Error uploading file:', error);
         }
     };
@@ -55,40 +60,47 @@ function App() {
                 fill: false,
                 borderColor: 'rgb(75, 192, 192)',
                 tension: 0.1,
-                pointRadius: 4, // Increase point size
-             pointHoverRadius: 7, // Increase point size on hover
+                pointBackgroundColor: 'rgb(255, 99, 132)', // Point fill color
+                pointBorderColor: 'rgb(255, 99, 132)' ,
+                pointRadius: 4, 
+             pointHoverRadius: 7, 
             }
         ]
     };
+
+    
+    
+
 
     return (
 
         
         <div className="container">
-            <h1 className='text-center fw-bold mb-4'>Sales Forecasting</h1>
+            <h1 className='text-center fw-bold mb-4 mt-3'>Sales Forecasting</h1>
             <div className="row">
                 <div className="col-md-6 center-content">
-                    <div className="card">
-                        <div className="card-header">Upload and Predict</div>
+                    <div className="card shadow-lg">
+                        <div className="card-header bg-primary text-white fw-bold text-center">Upload and Predict</div>
                         <div className="card-body">
                             <form onSubmit={handleSubmit} className="form-group">
                                 <div className="form-group">
-                                    <label htmlFor="fileUpload">Upload file:</label>
+                                    <label htmlFor="fileUpload">Upload file: </label>
                                     <input type="file" className="form-control-file" id="fileUpload" onChange={handleFileChange} />
                                 </div>
                                 <div className="form-group">
-                                    <label htmlFor="periodsInput">Periods:</label>
+                                    <label htmlFor="periodsInput">Periods (in days): </label>
                                     <input type="number" className="form-control" id="periodsInput" value={periods} onChange={handlePeriodChange} />
                                 </div>
-                                <button type="submit" className="btn btn-primary mt-2">Submit</button>
+                                <button type="submit" className="btn btn-success mt-2">Submit</button>
                             </form>
                         </div>
                     </div>
                 </div>
                 <div className="col-md-6 full-width-table">
+                <h3 className='text-center'>Results</h3>
                 {yhat1Values.length > 0 && (
                     <div className="scrollable-table">
-                        <table className="table table-striped table-primary">
+                        <table className="table table-responsive table-striped table-primary">
                             <thead>
                                 <tr>
                                     <th>Date</th>
@@ -112,9 +124,9 @@ function App() {
          
                   
 
-            <div className="row">
+            <div className="row text-center">
                 <div className="col-12">
-                    {result && <Line data={chartData} />}
+                    {result && <Line data={chartData}  />}
                 </div>
             </div>
         </div>
