@@ -1,7 +1,7 @@
 import React from 'react';
 import {  Link } from "react-router-dom";
 
-function Sidebar() {
+function SidebarTwo() {
   const sidebarStyle = {
     height: '100vh', 
     backgroundColor: 'lightgreen', 
@@ -20,17 +20,29 @@ function Sidebar() {
     borderBottom: '2px solid #13e00e' ,// 2px solid white border
     marginTop:'10px'
   };
+
+  const linkStyleActive = {
+    display: 'block',
+    padding: '20px',
+    textDecoration: 'none',
+    color: 'white',
+    fontSize: '16px',
+    fontWeight: 'bold',
+    backgroundColor: '#0b872c',
+    borderBottom: '2px solid #13e00e' ,// 2px solid white border
+    marginTop:'10px'
+  };
   
 
   return (
     <div style={sidebarStyle}>
-      <h4 className="mb-4 text-center py-4">Forecast</h4>
+      <h4 className="mb-4 text-center py-4">History</h4>
       <ul style={{ listStyleType: 'none', padding: 0 }}>
       <li>
       <Link to="/" style={linkStyle}>Forecast Values</Link>
     </li>
     <li>
-    <Link to="/hist" style={linkStyle}>Historic Values</Link>
+    <Link to="/hist" style={linkStyleActive}>Historic Values</Link>
   </li>
         <li style={linkStyle}>Traffic</li>
       </ul>
@@ -38,4 +50,4 @@ function Sidebar() {
   );
 }
 
-export default Sidebar;
+export default SidebarTwo;
