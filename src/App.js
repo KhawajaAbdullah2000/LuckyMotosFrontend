@@ -190,7 +190,7 @@ function App() {
      
         
           </div>
-          <div className="row mt-8">
+          <div className="row mt-4">
             <div className="col-md-8">
             <Line data={chartData} options={options}  />
             </div>

@@ -23,7 +23,7 @@ function Sidebar() {
 
   return (
     <div style={sidebarStyle}>
-      <h4 className="mb-4 text-center py-4">Lucky Motors</h4>
+      <h4 className="mb-4 text-center py-4">Historic Data</h4>
       <ul style={{ listStyleType: 'none', padding: 0 }}>
         <li style={linkStyle}>Home</li>
         <li style={linkStyle}>Sales</li>
