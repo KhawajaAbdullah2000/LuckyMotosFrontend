@@ -53,6 +53,7 @@ function History() {
                 }
             });
             setResult(response.data);
+            console.log(response.data);
             setLoading(false);
         } catch (error) {
             setLoading(false);
@@ -60,16 +61,16 @@ function History() {
         }
     };
 
-    const yhat1Values = result ? Object.values(result.yhat1).map(value => value.toFixed(2)) : [];
+    const yhat1Values = result ? Object.values(result.y).map(value => value.toFixed(2)) : [];
     const dates = result ? Object.values(result.ds).map(date => date.split(" ").slice(0, 4).join(" ")) : [];
-    const highlightStartIndex = result ? yhat1Values.length - periods : 0;
+    // const highlightStartIndex = result ? yhat1Values.length - periods : 0;
 
     const chartData = {
         labels: result ? Object.values(result.ds).map(date => date.split(" ").slice(1, 4).join(" ")) : [],
         datasets: [
             {
-                label: 'Sales Forecast (yhat1)',
-                data: result ? Object.values(result.yhat1) : [],
+                label: 'Sales',
+                data: result ? Object.values(result.y) : [],
                 borderColor: 'rgb(75, 192, 192)',
                 tension: 0.1,
                 pointBackgroundColor: 'rgb(255, 99, 132)',
@@ -171,17 +172,17 @@ function History() {
                                             <thead>
                                                 <tr>
                                                     <th>Date</th>
-                                                    <th>Forecast</th>
+                                                    <th>Sales</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 {yhat1Values.map((value, index) => (
-                                                    index < highlightStartIndex ? (
+                                                  
                                                         <tr key={index}>
                                                             <td>{dates[index]}</td>
                                                             <td>{value}</td>
                                                         </tr>
-                                                    ) : null
+                                                  
                                                 ))}
                                             </tbody>
                                         </table>
